@@ -18,3 +18,5 @@ export const NationalityStep = ({ form }: { form: any }) => {
     />
   );
 };
+
+export default NationalityStep;

@@ -33,3 +33,5 @@ export const FaithStep = ({ form }: { form: any }) => {
     />
   );
 };
+
+export default FaithStep;

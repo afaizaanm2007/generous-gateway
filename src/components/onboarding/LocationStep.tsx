@@ -18,3 +18,5 @@ export const LocationStep = ({ form }: { form: any }) => {
     />
   );
 };
+
+export default LocationStep;

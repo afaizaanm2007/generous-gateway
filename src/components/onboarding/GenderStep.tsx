@@ -35,3 +35,5 @@ export const GenderStep = ({ form }: { form: any }) => {
     />
   );
 };
+
+export default GenderStep;

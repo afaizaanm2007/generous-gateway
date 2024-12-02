@@ -7,11 +7,11 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useOnboardingStore } from "@/store/onboardingStore";
 import { useToast } from "@/components/ui/use-toast";
-import { FaithStep } from "@/components/onboarding/FaithStep";
-import { NationalityStep } from "@/components/onboarding/NationalityStep";
-import { LocationStep } from "@/components/onboarding/LocationStep";
-import { GenderStep } from "@/components/onboarding/GenderStep";
-import { AgeStep } from "@/components/onboarding/AgeStep";
+import FaithStep from "@/components/onboarding/FaithStep";
+import NationalityStep from "@/components/onboarding/NationalityStep";
+import LocationStep from "@/components/onboarding/LocationStep";
+import GenderStep from "@/components/onboarding/GenderStep";
+import AgeStep from "@/components/onboarding/AgeStep";
 
 const formSchema = z.object({
   faith: z.string().min(1, "Please select your faith"),

@@ -18,3 +18,5 @@ export const AgeStep = ({ form }: { form: any }) => {
     />
   );
 };
+
+export default AgeStep;
