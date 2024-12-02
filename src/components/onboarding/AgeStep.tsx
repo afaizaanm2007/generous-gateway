@@ -1,18 +1,22 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { FormField, FormItem } from "@/components/ui/form";
 
-export const AgeStep = ({ form }: { form: any }) => {
+const AgeStep = ({ form }: any) => {
   return (
     <FormField
       control={form.control}
       name="age"
-      render={({ field }) => (
+      render={() => (
         <FormItem>
-          <FormLabel>What is your age?</FormLabel>
-          <FormControl>
-            <Input type="number" placeholder="Enter your age" {...field} />
-          </FormControl>
-          <FormMessage />
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold">What's your age?</h2>
+            <input
+              type="text"
+              placeholder="Enter your age"
+              className="border p-2 rounded"
+              {...form.register("age")}
+            />
+          </div>
         </FormItem>
       )}
     />

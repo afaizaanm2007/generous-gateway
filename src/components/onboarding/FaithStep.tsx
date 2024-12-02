@@ -1,33 +1,29 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import React from "react";
+import { FormField, FormItem } from "@/components/ui/form";
 
-export const FaithStep = ({ form }: { form: any }) => {
+const FaithStep = ({ form }: any) => {
   return (
     <FormField
       control={form.control}
       name="faith"
-      render={({ field }) => (
+      render={() => (
         <FormItem>
-          <FormLabel>What is your faith?</FormLabel>
-          <FormControl>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select your faith" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="muslim">Muslim</SelectItem>
-                <SelectItem value="christian">Christian</SelectItem>
-                <SelectItem value="jewish">Jewish</SelectItem>
-                <SelectItem value="hindu">Hindu</SelectItem>
-                <SelectItem value="buddhist">Buddhist</SelectItem>
-                <SelectItem value="sikh">Sikh</SelectItem>
-                <SelectItem value="spiritual">Spiritual but not religious</SelectItem>
-                <SelectItem value="atheist">Atheist/Agnostic</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </FormControl>
-          <FormMessage />
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold">What's your faith?</h2>
+            <select
+              {...form.register("faith")}
+              className="mt-2 p-2 border border-gray-300 rounded"
+            >
+              <option value="">Select your faith</option>
+              <option value="Christianity">Christianity</option>
+              <option value="Islam">Islam</option>
+              <option value="Hinduism">Hinduism</option>
+              <option value="Buddhism">Buddhism</option>
+              <option value="Sikhism">Sikhism</option>
+              <option value="Judaism">Judaism</option>
+              <option value="None">None</option>
+            </select>
+          </div>
         </FormItem>
       )}
     />

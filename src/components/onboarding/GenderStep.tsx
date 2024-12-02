@@ -1,35 +1,36 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import React from "react";
+import { FormField, FormItem } from "@/components/ui/form";
 
-export const GenderStep = ({ form }: { form: any }) => {
+const GenderStep = ({ form }: any) => {
   return (
     <FormField
       control={form.control}
       name="gender"
-      render={({ field }) => (
+      render={() => (
         <FormItem>
-          <FormLabel>What is your gender?</FormLabel>
-          <FormControl>
-            <RadioGroup
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              className="flex flex-col space-y-2"
-            >
-              <FormItem className="flex items-center space-x-3 space-y-0">
-                <FormControl>
-                  <RadioGroupItem value="male" />
-                </FormControl>
-                <FormLabel className="font-normal">Male</FormLabel>
-              </FormItem>
-              <FormItem className="flex items-center space-x-3 space-y-0">
-                <FormControl>
-                  <RadioGroupItem value="female" />
-                </FormControl>
-                <FormLabel className="font-normal">Female</FormLabel>
-              </FormItem>
-            </RadioGroup>
-          </FormControl>
-          <FormMessage />
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold">What's your gender?</h2>
+            <div className="flex items-center justify-center">
+              <label className="flex items-center mr-4">
+                <input
+                  type="radio"
+                  value="male"
+                  {...form.register("gender")}
+                  className="mr-2"
+                />
+                Male
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="female"
+                  {...form.register("gender")}
+                  className="mr-2"
+                />
+                Female
+              </label>
+            </div>
+          </div>
         </FormItem>
       )}
     />

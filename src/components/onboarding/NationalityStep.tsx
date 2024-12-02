@@ -1,18 +1,22 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { FormField, FormItem } from "@/components/ui/form";
 
-export const NationalityStep = ({ form }: { form: any }) => {
+const NationalityStep = ({ form }: any) => {
   return (
     <FormField
       control={form.control}
       name="nationality"
-      render={({ field }) => (
+      render={() => (
         <FormItem>
-          <FormLabel>What is your nationality/origin?</FormLabel>
-          <FormControl>
-            <Input placeholder="Enter your nationality" {...field} />
-          </FormControl>
-          <FormMessage />
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold">What's your nationality?</h2>
+            <input
+              type="text"
+              placeholder="Enter your nationality"
+              className="mt-2 p-2 border border-gray-300 rounded"
+              {...form.register("nationality")}
+            />
+          </div>
         </FormItem>
       )}
     />
