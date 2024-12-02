@@ -130,8 +130,7 @@ const Onboarding = () => {
                 </button>
               )}
               <button
-                type="button"
-                onClick={handleNext}
+                type="submit"
                 className="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary/90 ml-auto"
               >
                 {currentStep === steps.length - 1 ? "Complete" : "Next"}

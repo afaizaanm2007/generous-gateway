@@ -11,9 +11,11 @@ const AgeStep = ({ form }: any) => {
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold">What's your age?</h2>
             <input
-              type="text"
+              type="number"
               placeholder="Enter your age"
-              className="border p-2 rounded"
+              className="mt-2 p-2 border border-gray-300 rounded"
+              min="0"
+              max="120"
               {...form.register("age")}
             />
           </div>
