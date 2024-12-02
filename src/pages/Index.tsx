@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Heart, PieChart, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -23,7 +26,10 @@ const Index = () => {
             <p className="text-gray-600 text-xl mb-8 max-w-2xl mx-auto">
               A personalized platform that connects you with verified nonprofits aligned with your values and interests.
             </p>
-            <button className="bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-primary/90 transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <button 
+              onClick={() => navigate("/onboarding")}
+              className="bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-primary/90 transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
               Start Your Journey
             </button>
           </motion.div>
