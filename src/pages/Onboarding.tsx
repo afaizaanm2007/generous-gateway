@@ -12,7 +12,6 @@ import { NationalityStep } from "@/components/onboarding/NationalityStep";
 import { LocationStep } from "@/components/onboarding/LocationStep";
 import { GenderStep } from "@/components/onboarding/GenderStep";
 import { AgeStep } from "@/components/onboarding/AgeStep";
-import { InterestsStep } from "@/components/onboarding/InterestsStep";
 
 const formSchema = z.object({
   faith: z.string().min(1, "Please select your faith"),
@@ -22,10 +21,9 @@ const formSchema = z.object({
     required_error: "Please select your gender",
   }),
   age: z.string().min(1, "Please enter your age"),
-  interests: z.array(z.string()).min(1, "Please select at least one interest"),
 });
 
-const steps = ["faith", "nationality", "location", "gender", "age", "interests"] as const;
+const steps = ["faith", "nationality", "location", "gender", "age"] as const;
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,7 +39,6 @@ const Onboarding = () => {
       location: "",
       gender: undefined,
       age: "",
-      interests: [],
     },
   });
 
@@ -80,7 +77,6 @@ const Onboarding = () => {
       location: LocationStep,
       gender: GenderStep,
       age: AgeStep,
-      interests: InterestsStep,
     };
 
     const CurrentStepComponent = StepComponents[steps[currentStep]];
