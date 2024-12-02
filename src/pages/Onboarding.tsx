@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useOnboardingStore } from "@/store/onboardingStore";
+import { FaithStep } from "@/components/onboarding/FaithStep";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   faith: z.string().min(1, "Please select your faith"),
@@ -32,6 +25,8 @@ const steps = ["faith", "nationality", "location", "gender", "age", "interests"]
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const setField = useOnboardingStore((state) => state.setField);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,9 +40,17 @@ const Onboarding = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const currentField = steps[currentStep];
+    setField(currentField, values[currentField]);
+
     if (currentStep === steps.length - 1) {
+      // Here you would typically send the data to your backend
       console.log("Form submitted:", values);
+      toast({
+        title: "Onboarding complete!",
+        description: "Welcome to your personalized donation journey.",
+      });
       navigate("/dashboard");
     } else {
       setCurrentStep((prev) => prev + 1);
@@ -57,30 +60,7 @@ const Onboarding = () => {
   const renderStep = () => {
     switch (steps[currentStep]) {
       case "faith":
-        return (
-          <FormField
-            control={form.control}
-            name="faith"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>What is your faith?</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your faith" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="muslim">Muslim</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        );
-
+        return <FaithStep form={form} />;
       case "nationality":
         return (
           <FormField
