@@ -11,14 +11,14 @@ const LocationStep = ({ form }: any) => {
     <FormField
       control={form.control}
       name="location"
-      render={() => (
+      render={({ field }) => (
         <FormItem>
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold">Where are you located?</h2>
             <GooglePlacesAutocomplete
-              apiKey={process.env.VITE_GOOGLE_MAPS_API_KEY}
+              apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
               selectProps={{
-                value: form.getValues("location") ? { label: form.getValues("location"), value: form.getValues("location") } : null,
+                value: field.value ? { label: field.value, value: field.value } : null,
                 onChange: handleLocationChange,
                 placeholder: "Start typing your location...",
                 className: "w-full",
