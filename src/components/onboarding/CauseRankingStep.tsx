@@ -98,8 +98,11 @@ const CauseRankingStep = ({ form }: any) => {
                                 position: snapshot.isDragging ? 'relative' : undefined,
                                 zIndex: snapshot.isDragging ? 999 : 'auto',
                                 transformOrigin: "0 0",
+                                touchAction: "none",
                                 ...provided.draggableProps.style,
                               }}
+                              dragSnapToOrigin={false}
+                              dragElastic={0.1}
                             >
                               <Card 
                                 className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing transition-all duration-200 ${
