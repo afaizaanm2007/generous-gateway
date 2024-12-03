@@ -6,12 +6,12 @@ const FaithStep = ({ form }: any) => {
     <FormField
       control={form.control}
       name="faith"
-      render={() => (
+      render={({ field }) => (
         <FormItem>
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold">What's your faith?</h2>
             <select
-              {...form.register("faith")}
+              {...field}
               className="mt-2 p-2 border border-gray-300 rounded w-full"
             >
               <option value="">Select your faith</option>
@@ -23,6 +23,9 @@ const FaithStep = ({ form }: any) => {
               <option value="Judaism">Judaism</option>
               <option value="None">None</option>
             </select>
+            {form.formState.errors.faith && (
+              <p className="text-red-500">{form.formState.errors.faith.message}</p>
+            )}
           </div>
         </FormItem>
       )}
