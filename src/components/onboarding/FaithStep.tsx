@@ -12,7 +12,7 @@ const FaithStep = ({ form }: any) => {
             <h2 className="text-2xl font-bold">What's your faith?</h2>
             <select
               {...form.register("faith")}
-              className="mt-2 p-2 border border-gray-300 rounded"
+              className="mt-2 p-2 border border-gray-300 rounded w-full"
             >
               <option value="">Select your faith</option>
               <option value="Christianity">Christianity</option>
