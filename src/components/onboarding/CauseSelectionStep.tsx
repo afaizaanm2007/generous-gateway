@@ -61,10 +61,11 @@ const CauseSelectionStep = ({ form }: any) => {
                   key={cause}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  className="h-full"
                 >
                   <Card
                     className={cn(
-                      "cursor-pointer p-4 text-center hover:shadow-md transition-all duration-200",
+                      "cursor-pointer h-full flex items-center justify-center p-4 text-center hover:shadow-md transition-all duration-200 min-h-[80px]",
                       selectedCauses.includes(cause)
                         ? "bg-primary text-primary-foreground"
                         : "bg-white hover:bg-gray-50"
