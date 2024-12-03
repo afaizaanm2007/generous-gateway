@@ -11,7 +11,6 @@ const CauseRankingStep = ({ form }: any) => {
   const selectedCauses = form.watch("selectedCauses") || [];
 
   React.useEffect(() => {
-    // Initialize rankedCauses with selectedCauses if not already set
     if (!form.getValues("rankedCauses")) {
       form.setValue("rankedCauses", selectedCauses);
     }
@@ -85,11 +84,19 @@ const CauseRankingStep = ({ form }: any) => {
                               transition={{
                                 duration: 0.2,
                                 delay: index * 0.05,
+                                type: "spring",
+                                stiffness: 500,
+                                damping: 30
+                              }}
+                              style={{
+                                position: snapshot.isDragging ? 'relative' : undefined,
+                                zIndex: snapshot.isDragging ? 999 : 1,
+                                ...provided.draggableProps.style,
                               }}
                             >
                               <Card 
-                                className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing ${
-                                  snapshot.isDragging ? "shadow-lg" : ""
+                                className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing transition-shadow duration-200 ${
+                                  snapshot.isDragging ? "shadow-xl ring-2 ring-primary/20" : ""
                                 }`}
                               >
                                 <span className="font-medium text-gray-700 flex-1">
