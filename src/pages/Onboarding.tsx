@@ -47,12 +47,11 @@ const Onboarding = () => {
     setField(currentField, values[currentField]);
 
     if (currentStep === steps.length - 1) {
-      console.log("Form submitted:", values);
       toast({
-        title: "Onboarding complete!",
-        description: "Welcome to your personalized donation journey.",
+        title: "Profile information saved!",
+        description: "Let's set up your interests next.",
       });
-      navigate("/dashboard");
+      navigate("/interests-onboarding");
     } else {
       setCurrentStep((prev) => prev + 1);
     }
