@@ -58,15 +58,15 @@ const Onboarding = () => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const currentField = steps[currentStep];
     const fieldValue = form.getValues(currentField);
     
-    if (fieldValue && fieldValue.length > 0) {
+    const isValid = await form.trigger(currentField);
+    
+    if (isValid) {
       setField(currentField, fieldValue);
       setCurrentStep((prev) => prev + 1);
-    } else {
-      form.trigger(currentField);
     }
   };
 
@@ -130,7 +130,8 @@ const Onboarding = () => {
                 </button>
               )}
               <button
-                type="submit"
+                type={currentStep === steps.length - 1 ? "submit" : "button"}
+                onClick={currentStep === steps.length - 1 ? undefined : handleNext}
                 className="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary/90 ml-auto"
               >
                 {currentStep === steps.length - 1 ? "Complete" : "Next"}
