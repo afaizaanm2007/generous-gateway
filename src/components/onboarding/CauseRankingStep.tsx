@@ -78,6 +78,7 @@ const CauseRankingStep = ({ form }: any) => {
                             <motion.div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
+                              {...provided.dragHandleProps}
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -20 }}
@@ -87,17 +88,14 @@ const CauseRankingStep = ({ form }: any) => {
                               }}
                             >
                               <Card 
-                                className={`p-4 bg-white flex items-center justify-between ${
+                                className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing ${
                                   snapshot.isDragging ? "shadow-lg" : ""
                                 }`}
                               >
                                 <span className="font-medium text-gray-700 flex-1">
                                   {index + 1}. {cause}
                                 </span>
-                                <div
-                                  {...provided.dragHandleProps}
-                                  className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
-                                >
+                                <div className="text-gray-400">
                                   <GripVertical size={20} />
                                 </div>
                               </Card>
