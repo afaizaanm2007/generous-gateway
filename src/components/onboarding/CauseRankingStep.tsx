@@ -3,12 +3,21 @@ import { FormField, FormItem } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { GripVertical } from "lucide-react";
 
 const CauseRankingStep = ({ form }: any) => {
   const [allowDynamicPriorities, setAllowDynamicPriorities] = useState(false);
   const selectedCauses = form.watch("selectedCauses") || [];
-  const rankedCauses = form.watch("rankedCauses") || selectedCauses;
+
+  React.useEffect(() => {
+    // Initialize rankedCauses with selectedCauses if not already set
+    if (!form.getValues("rankedCauses")) {
+      form.setValue("rankedCauses", selectedCauses);
+    }
+  }, [selectedCauses, form]);
+
+  const rankedCauses = form.watch("rankedCauses") || [];
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -28,12 +37,12 @@ const CauseRankingStep = ({ form }: any) => {
         <FormItem>
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <h2 className="text-2xl font-bold">Hey there!</h2>
+              <h2 className="text-2xl font-bold">Prioritize Your Causes</h2>
               <p className="text-gray-600">
-                Drag and drop to rank the categories by priority
+                Drag and drop to rank your selected causes by priority
               </p>
               <p className="text-sm text-gray-500">
-                (you can always come back and change them)
+                This helps us understand which causes matter most to you
               </p>
             </div>
 
@@ -41,8 +50,7 @@ const CauseRankingStep = ({ form }: any) => {
               <div className="space-y-1">
                 <h3 className="font-medium">Allow Dynamic Priorities</h3>
                 <p className="text-sm text-gray-500">
-                  Turning on this feature allows the platform to change your priorities
-                  over time based on your manual donations
+                  Let the platform adjust your priorities based on your donation patterns
                 </p>
               </div>
               <Switch
@@ -59,30 +67,45 @@ const CauseRankingStep = ({ form }: any) => {
                     ref={provided.innerRef}
                     className="space-y-2"
                   >
-                    {rankedCauses.map((cause: string, index: number) => (
-                      <Draggable
-                        key={cause}
-                        draggableId={cause}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <motion.div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                          >
-                            <Card className="p-4 bg-white flex items-center justify-between">
-                              <span className="font-medium text-gray-700">
-                                {index + 1}. {cause}
-                              </span>
-                            </Card>
-                          </motion.div>
-                        )}
-                      </Draggable>
-                    ))}
+                    <AnimatePresence>
+                      {rankedCauses.map((cause: string, index: number) => (
+                        <Draggable
+                          key={cause}
+                          draggableId={cause}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <motion.div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -20 }}
+                              transition={{
+                                duration: 0.2,
+                                delay: index * 0.05,
+                              }}
+                            >
+                              <Card 
+                                className={`p-4 bg-white flex items-center justify-between ${
+                                  snapshot.isDragging ? "shadow-lg" : ""
+                                }`}
+                              >
+                                <span className="font-medium text-gray-700 flex-1">
+                                  {index + 1}. {cause}
+                                </span>
+                                <div
+                                  {...provided.dragHandleProps}
+                                  className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+                                >
+                                  <GripVertical size={20} />
+                                </div>
+                              </Card>
+                            </motion.div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </AnimatePresence>
                     {provided.placeholder}
                   </div>
                 )}
