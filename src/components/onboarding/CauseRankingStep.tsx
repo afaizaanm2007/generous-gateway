@@ -79,23 +79,30 @@ const CauseRankingStep = ({ form }: any) => {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
+                              animate={{ 
+                                opacity: 1, 
+                                y: 0,
+                                scale: snapshot.isDragging ? 1.05 : 1,
+                                boxShadow: snapshot.isDragging 
+                                  ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                                  : "none",
+                              }}
                               exit={{ opacity: 0, y: -20 }}
                               transition={{
-                                duration: 0.2,
-                                delay: index * 0.05,
                                 type: "spring",
                                 stiffness: 500,
-                                damping: 30
+                                damping: 30,
+                                mass: 1
                               }}
                               style={{
                                 position: snapshot.isDragging ? 'relative' : undefined,
-                                zIndex: snapshot.isDragging ? 999 : 1,
+                                zIndex: snapshot.isDragging ? 999 : 'auto',
+                                transformOrigin: "0 0",
                                 ...provided.draggableProps.style,
                               }}
                             >
                               <Card 
-                                className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing transition-shadow duration-200 ${
+                                className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing transition-all duration-200 ${
                                   snapshot.isDragging ? "shadow-xl ring-2 ring-primary/20" : ""
                                 }`}
                               >
