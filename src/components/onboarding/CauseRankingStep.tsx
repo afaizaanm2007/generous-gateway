@@ -2,8 +2,13 @@ import React, { useEffect, useRef } from "react";
 import { FormField, FormItem } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import dragula from "react-dragula";
+import dragula from "dragula";
 import "dragula/dist/dragula.css";
+
+// Polyfill for global
+if (typeof window !== 'undefined' && !window.global) {
+  window.global = window;
+}
 
 const CauseRankingStep = ({ form }: any) => {
   const [allowDynamicPriorities, setAllowDynamicPriorities] = React.useState(false);
@@ -18,7 +23,10 @@ const CauseRankingStep = ({ form }: any) => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const drake = dragula([containerRef.current]);
+      const drake = dragula([containerRef.current], {
+        direction: 'vertical',
+        revertOnSpill: true
+      });
       
       drake.on('drop', () => {
         if (containerRef.current) {
