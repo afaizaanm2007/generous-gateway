@@ -1,14 +1,14 @@
+// Polyfill for global
+if (typeof window !== 'undefined') {
+  (window as any).global = window;
+}
+
 import React, { useEffect, useRef } from "react";
 import { FormField, FormItem } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import dragula from "dragula";
 import "dragula/dist/dragula.css";
-
-// Polyfill for global
-if (typeof window !== 'undefined' && !window.global) {
-  window.global = window;
-}
 
 const CauseRankingStep = ({ form }: any) => {
   const [allowDynamicPriorities, setAllowDynamicPriorities] = React.useState(false);
