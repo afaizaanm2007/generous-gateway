@@ -1,47 +1,81 @@
-// Polyfill for global
-if (typeof window !== 'undefined') {
-  (window as any).global = window;
-}
-
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { FormField, FormItem } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import dragula from "dragula";
-import "dragula/dist/dragula.css";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { GripVertical } from "lucide-react";
+
+interface SortableItemProps {
+  id: string;
+  index: number;
+}
+
+const SortableItem = ({ id, index }: SortableItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <Card
+      ref={setNodeRef}
+      style={style}
+      className="p-4 bg-white flex items-center justify-between transition-all duration-200 hover:shadow-md"
+    >
+      <span className="font-medium text-gray-700 flex-1">
+        {index + 1}. {id}
+      </span>
+      <button
+        className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-100 rounded"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-5 w-5 text-gray-500" />
+      </button>
+    </Card>
+  );
+};
 
 const CauseRankingStep = ({ form }: any) => {
   const [allowDynamicPriorities, setAllowDynamicPriorities] = React.useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const selectedCauses = form.watch("selectedCauses") || [];
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!form.getValues("rankedCauses")) {
       form.setValue("rankedCauses", selectedCauses);
     }
   }, [selectedCauses, form]);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const drake = dragula([containerRef.current], {
-        direction: 'vertical',
-        revertOnSpill: true
-      });
-      
-      drake.on('drop', () => {
-        if (containerRef.current) {
-          const newOrder = Array.from(containerRef.current.children).map(
-            child => child.getAttribute('data-cause')
-          ).filter(Boolean) as string[];
-          form.setValue("rankedCauses", newOrder);
-        }
-      });
-
-      return () => drake.destroy();
-    }
-  }, [form]);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const rankedCauses = form.watch("rankedCauses") || [];
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = rankedCauses.indexOf(active.id);
+      const newIndex = rankedCauses.indexOf(over.id);
+      const newOrder = arrayMove(rankedCauses, oldIndex, newIndex);
+      form.setValue("rankedCauses", newOrder);
+    }
+  };
 
   return (
     <FormField
@@ -73,22 +107,22 @@ const CauseRankingStep = ({ form }: any) => {
               />
             </div>
 
-            <div 
-              ref={containerRef}
-              className="space-y-2"
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
             >
-              {rankedCauses.map((cause: string, index: number) => (
-                <Card 
-                  key={cause}
-                  data-cause={cause}
-                  className="p-4 bg-white flex items-center justify-between cursor-move transition-all duration-200 hover:shadow-md"
-                >
-                  <span className="font-medium text-gray-700 flex-1">
-                    {index + 1}. {cause}
-                  </span>
-                </Card>
-              ))}
-            </div>
+              <SortableContext
+                items={rankedCauses}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="space-y-2">
+                  {rankedCauses.map((cause: string, index: number) => (
+                    <SortableItem key={cause} id={cause} index={index} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           </div>
         </FormItem>
       )}
