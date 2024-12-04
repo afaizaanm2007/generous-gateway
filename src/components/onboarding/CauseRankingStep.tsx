@@ -1,32 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { FormField, FormItem } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { motion, AnimatePresence } from "framer-motion";
-import { GripVertical } from "lucide-react";
+import dragula from "react-dragula";
+import "dragula/dist/dragula.css";
 
 const CauseRankingStep = ({ form }: any) => {
-  const [allowDynamicPriorities, setAllowDynamicPriorities] = useState(false);
+  const [allowDynamicPriorities, setAllowDynamicPriorities] = React.useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const selectedCauses = form.watch("selectedCauses") || [];
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!form.getValues("rankedCauses")) {
       form.setValue("rankedCauses", selectedCauses);
     }
   }, [selectedCauses, form]);
 
+  useEffect(() => {
+    if (containerRef.current) {
+      const drake = dragula([containerRef.current]);
+      
+      drake.on('drop', () => {
+        if (containerRef.current) {
+          const newOrder = Array.from(containerRef.current.children).map(
+            child => child.getAttribute('data-cause')
+          ).filter(Boolean) as string[];
+          form.setValue("rankedCauses", newOrder);
+        }
+      });
+
+      return () => drake.destroy();
+    }
+  }, [form]);
+
   const rankedCauses = form.watch("rankedCauses") || [];
-
-  const onDragEnd = (result: any) => {
-    if (!result.destination) return;
-
-    const items = Array.from(rankedCauses);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    form.setValue("rankedCauses", items);
-  };
 
   return (
     <FormField
@@ -58,74 +65,22 @@ const CauseRankingStep = ({ form }: any) => {
               />
             </div>
 
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="causes">
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="space-y-2"
-                  >
-                    <AnimatePresence>
-                      {rankedCauses.map((cause: string, index: number) => (
-                        <Draggable
-                          key={cause}
-                          draggableId={cause}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <motion.div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ 
-                                opacity: 1, 
-                                y: 0,
-                                scale: snapshot.isDragging ? 1.05 : 1,
-                                boxShadow: snapshot.isDragging 
-                                  ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                                  : "none",
-                              }}
-                              exit={{ opacity: 0, y: -20 }}
-                              transition={{
-                                type: "spring",
-                                stiffness: 500,
-                                damping: 30,
-                                mass: 1
-                              }}
-                              style={{
-                                position: snapshot.isDragging ? 'relative' : undefined,
-                                zIndex: snapshot.isDragging ? 999 : 'auto',
-                                transformOrigin: "0 0",
-                                touchAction: "none",
-                                ...provided.draggableProps.style,
-                              }}
-                              dragSnapToOrigin={false}
-                              dragElastic={0.1}
-                            >
-                              <Card 
-                                className={`p-4 bg-white flex items-center justify-between cursor-grab active:cursor-grabbing transition-all duration-200 ${
-                                  snapshot.isDragging ? "shadow-xl ring-2 ring-primary/20" : ""
-                                }`}
-                              >
-                                <span className="font-medium text-gray-700 flex-1">
-                                  {index + 1}. {cause}
-                                </span>
-                                <div className="text-gray-400">
-                                  <GripVertical size={20} />
-                                </div>
-                              </Card>
-                            </motion.div>
-                          )}
-                        </Draggable>
-                      ))}
-                    </AnimatePresence>
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <div 
+              ref={containerRef}
+              className="space-y-2"
+            >
+              {rankedCauses.map((cause: string, index: number) => (
+                <Card 
+                  key={cause}
+                  data-cause={cause}
+                  className="p-4 bg-white flex items-center justify-between cursor-move transition-all duration-200 hover:shadow-md"
+                >
+                  <span className="font-medium text-gray-700 flex-1">
+                    {index + 1}. {cause}
+                  </span>
+                </Card>
+              ))}
+            </div>
           </div>
         </FormItem>
       )}
