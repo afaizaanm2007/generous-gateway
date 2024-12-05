@@ -12,44 +12,50 @@ interface Nonprofit {
   description: string;
   category: string;
   avatar: string;
+  handle: string;
 }
 
 // Sample nonprofits data - in a real app, this would come from an API
 const nonprofits: Nonprofit[] = [
   {
     id: "1",
-    name: "Global Education Fund",
-    description: "Providing educational resources to underprivileged communities worldwide",
-    category: "Education",
-    avatar: "/placeholder.svg"
+    name: "World Wildlife Fund",
+    description: "The world's leading conservation organization 🌍 Fighting to protect wildlife and wild places.",
+    category: "Environmental Protection",
+    avatar: "/placeholder.svg",
+    handle: "@WWF"
   },
   {
     id: "2",
-    name: "Ocean Cleanup Initiative",
-    description: "Working to remove plastic pollution from the world's oceans",
-    category: "Environmental Protection",
-    avatar: "/placeholder.svg"
+    name: "UNICEF",
+    description: "Working in 190+ countries for every child. Support UNICEF's mission to help every child thrive 🌟",
+    category: "Education",
+    avatar: "/placeholder.svg",
+    handle: "@UNICEF"
   },
   {
     id: "3",
-    name: "Food For All",
-    description: "Fighting hunger in local communities through food bank networks",
-    category: "Food Insecurity",
-    avatar: "/placeholder.svg"
+    name: "Doctors Without Borders",
+    description: "We provide medical care where it's needed most 🏥 Independent. Neutral. Impartial.",
+    category: "Medical Expense Assistance",
+    avatar: "/placeholder.svg",
+    handle: "@MSF_USA"
   },
   {
     id: "4",
-    name: "Medical Aid Global",
-    description: "Providing medical assistance to underserved populations",
-    category: "Medical Expense Assistance",
-    avatar: "/placeholder.svg"
+    name: "Feeding America",
+    description: "Leading the fight against hunger in America 🥫 42 million people face hunger in the U.S.",
+    category: "Food Insecurity",
+    avatar: "/placeholder.svg",
+    handle: "@FeedingAmerica"
   },
   {
     id: "5",
-    name: "Animal Sanctuary Network",
-    description: "Protecting and caring for abandoned and rescued animals",
-    category: "Animal Needs",
-    avatar: "/placeholder.svg"
+    name: "Save the Children",
+    description: "Creating lasting change in children's lives through education, health care & emergency aid 👶",
+    category: "Education",
+    avatar: "/placeholder.svg",
+    handle: "@SavetheChildren"
   }
 ];
 
@@ -77,7 +83,6 @@ const FollowNonprofitsStep = () => {
       return;
     }
     
-    // Store followed nonprofits in onboarding store
     useOnboardingStore.getState().setField("followedNonprofits", followedNonprofits);
     navigate("/dashboard");
   };
@@ -88,35 +93,35 @@ const FollowNonprofitsStep = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-xl mx-auto">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold">Follow nonprofits you know</h2>
-        <p className="text-gray-600">
-          Follow at least 2 nonprofits to get started
-        </p>
-        <p className="text-sm text-gray-500">
-          Following: {followedNonprofits.length}
+        <h1 className="text-3xl font-bold">Suggestions for you to follow</h1>
+        <p className="text-gray-600 text-lg">
+          Follow nonprofits you know or would like to know
         </p>
       </div>
 
       <div className="space-y-4">
         {relevantNonprofits.map((nonprofit) => (
-          <Card key={nonprofit.id} className="p-4">
+          <Card key={nonprofit.id} className="p-4 hover:bg-gray-50 transition-colors">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <Avatar>
+                <Avatar className="h-12 w-12">
                   <AvatarImage src={nonprofit.avatar} alt={nonprofit.name} />
                   <AvatarFallback>{nonprofit.name.substring(0, 2)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold">{nonprofit.name}</h3>
-                  <p className="text-sm text-gray-600">{nonprofit.description}</p>
-                  <span className="text-xs text-gray-500">{nonprofit.category}</span>
+                  <div className="flex items-center gap-1">
+                    <h3 className="font-semibold">{nonprofit.name}</h3>
+                  </div>
+                  <p className="text-sm text-gray-500">{nonprofit.handle}</p>
+                  <p className="text-sm text-gray-600 mt-1">{nonprofit.description}</p>
                 </div>
               </div>
               <Button
                 variant={followedNonprofits.includes(nonprofit.id) ? "default" : "outline"}
                 onClick={() => toggleFollow(nonprofit.id)}
+                className="min-w-[100px]"
               >
                 {followedNonprofits.includes(nonprofit.id) ? "Following" : "Follow"}
               </Button>
@@ -125,12 +130,13 @@ const FollowNonprofitsStep = () => {
         ))}
       </div>
 
-      <div className="flex justify-end pt-6">
+      <div className="sticky bottom-4 bg-white p-4 border-t">
         <Button 
           onClick={handleContinue}
-          className="w-full md:w-auto"
+          className="w-full"
+          size="lg"
         >
-          Continue
+          Next
         </Button>
       </div>
     </div>
