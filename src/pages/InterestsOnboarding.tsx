@@ -42,7 +42,7 @@ const InterestsOnboarding = () => {
         title: "Preferences saved!",
         description: "Your cause preferences have been updated.",
       });
-      navigate("/dashboard");
+      navigate("/follow-nonprofits");
     }
   };
 
