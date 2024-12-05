@@ -6,7 +6,6 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from "lucide-react";
 
 interface SortableItemProps {
   id: string;
@@ -31,18 +30,13 @@ const SortableItem = ({ id, index }: SortableItemProps) => {
     <Card
       ref={setNodeRef}
       style={style}
-      className="p-4 bg-white flex items-center justify-between transition-all duration-200 hover:shadow-md"
+      {...attributes}
+      {...listeners}
+      className="p-4 bg-white flex items-center justify-between transition-all duration-200 hover:shadow-md cursor-move"
     >
       <span className="font-medium text-gray-700 flex-1">
         {index + 1}. {id}
       </span>
-      <button
-        className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-100 rounded"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="h-5 w-5 text-gray-500" />
-      </button>
     </Card>
   );
 };
@@ -73,7 +67,11 @@ const CauseRankingStep = ({ form }: any) => {
       const oldIndex = rankedCauses.indexOf(active.id);
       const newIndex = rankedCauses.indexOf(over.id);
       const newOrder = arrayMove(rankedCauses, oldIndex, newIndex);
-      form.setValue("rankedCauses", newOrder);
+      form.setValue("rankedCauses", newOrder, { 
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true 
+      });
     }
   };
 
