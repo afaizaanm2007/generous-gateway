@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Onboarding from "./pages/Onboarding";
 import InterestsOnboarding from "./pages/InterestsOnboarding";
 import FollowNonprofitsOnboarding from "./pages/FollowNonprofitsOnboarding";
+import PortfolioAllocation from "./pages/PortfolioAllocation";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/interests-onboarding" element={<InterestsOnboarding />} />
           <Route path="/follow-nonprofits" element={<FollowNonprofitsOnboarding />} />
+          <Route path="/portfolio-allocation" element={<PortfolioAllocation />} />
         </Routes>
       </BrowserRouter>
       <Toaster />
