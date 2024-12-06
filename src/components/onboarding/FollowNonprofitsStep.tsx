@@ -252,11 +252,11 @@ const FollowNonprofitsStep = () => {
           ))}
         </div>
 
-        <div className="w-48 sticky top-4 h-fit">
+        <div className="w-48 sticky top-4 h-fit flex items-center justify-center">
           <Button 
             onClick={handleContinue}
-            className="w-full"
             size="lg"
+            className="w-full text-lg py-6 font-semibold"
           >
             Next
           </Button>
