@@ -7,29 +7,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { useOnboardingStore } from "@/store/onboardingStore";
-
-interface AllocationOption {
-  id: number;
-  name: string;
-  data: {
-    name: string;
-    value: number;
-    color: string;
-  }[];
-}
+import { motion } from "framer-motion";
 
 const PortfolioAllocation = () => {
-  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const { selectedCauses, rankedCauses } = useOnboardingStore();
+  const navigate = useNavigate();
 
-  // Example allocation options based on user preferences
-  const allocationOptions: AllocationOption[] = [
+  const allocationOptions = [
     {
       id: 1,
       name: "Balanced Impact",
+      description: "A well-rounded approach spreading support across your top causes",
       data: [
         { name: rankedCauses[0] || "Primary Cause", value: 50, color: "#34D399" },
         { name: rankedCauses[1] || "Secondary Cause", value: 25, color: "#60A5FA" },
@@ -40,6 +31,7 @@ const PortfolioAllocation = () => {
     {
       id: 2,
       name: "Focused Impact",
+      description: "Concentrated support for your highest priority causes",
       data: [
         { name: rankedCauses[0] || "Primary Cause", value: 70, color: "#34D399" },
         { name: rankedCauses[1] || "Secondary Cause", value: 20, color: "#60A5FA" },
@@ -49,6 +41,7 @@ const PortfolioAllocation = () => {
     {
       id: 3,
       name: "Diversified Impact",
+      description: "Equal distribution across your selected causes",
       data: [
         { name: rankedCauses[0] || "Primary Cause", value: 30, color: "#34D399" },
         { name: rankedCauses[1] || "Secondary Cause", value: 25, color: "#60A5FA" },
@@ -63,8 +56,6 @@ const PortfolioAllocation = () => {
       toast.success("Thank you for your feedback! We'll generate new allocations based on your input.");
       setFeedbackOpen(false);
       setFeedback("");
-      // Here you would typically send the feedback to your backend
-      // and generate new allocations based on the feedback
     }
   };
 
@@ -79,45 +70,63 @@ const PortfolioAllocation = () => {
 
   return (
     <div className="container max-w-6xl mx-auto py-8 px-4">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-4">Choose Your Impact Portfolio</h1>
-        <p className="text-gray-600">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          Choose Your Impact Portfolio
+        </h1>
+        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
           Based on your preferences, we've created three allocation strategies. 
           Choose the one that best matches your giving goals.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
+      <div className="grid md:grid-cols-3 gap-8 mb-12">
         {allocationOptions.map((option) => (
-          <Card
+          <motion.div
             key={option.id}
-            className={`p-6 cursor-pointer transition-all hover:shadow-lg ${
-              selectedOption === option.id ? "ring-2 ring-primary" : ""
-            }`}
-            onClick={() => setSelectedOption(option.id)}
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            <h3 className="text-xl font-semibold mb-4 text-center">{option.name}</h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={option.data}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {option.data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </Card>
+            <Card
+              className={`p-6 cursor-pointer transition-all hover:shadow-xl ${
+                selectedOption === option.id 
+                  ? "ring-2 ring-primary shadow-lg shadow-primary/20" 
+                  : "hover:shadow-lg hover:shadow-primary/10"
+              }`}
+              onClick={() => setSelectedOption(option.id)}
+            >
+              <h3 className="text-2xl font-bold mb-2 text-center bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                {option.name}
+              </h3>
+              <p className="text-gray-600 text-sm mb-4 text-center">
+                {option.description}
+              </p>
+              <div className="h-64 mb-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={option.data}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={2}
+                      dataKey="value"
+                    >
+                      {option.data.map((entry, index) => (
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={entry.color}
+                          className="transition-all duration-300"
+                        />
+                      ))}
+                    </Pie>
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </Card>
+          </motion.div>
         ))}
       </div>
 
@@ -125,7 +134,7 @@ const PortfolioAllocation = () => {
         <Button
           onClick={handleContinue}
           size="lg"
-          className="px-8 py-6 text-lg font-semibold"
+          className="px-12 py-6 text-xl font-semibold bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity animate-pulse"
         >
           Continue with Selected Allocation
         </Button>
@@ -133,7 +142,7 @@ const PortfolioAllocation = () => {
         <Button
           variant="ghost"
           onClick={() => setFeedbackOpen(true)}
-          className="text-gray-600"
+          className="text-gray-600 hover:text-gray-900"
         >
           I don't like any of these options
         </Button>

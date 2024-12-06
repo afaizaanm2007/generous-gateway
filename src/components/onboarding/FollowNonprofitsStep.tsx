@@ -204,7 +204,7 @@ const FollowNonprofitsStep = () => {
     }
     
     useOnboardingStore.getState().setField("followedNonprofits", followedNonprofits);
-    navigate("/dashboard");
+    navigate("/portfolio-allocation");
   };
 
   // Filter nonprofits based on user's selected causes
