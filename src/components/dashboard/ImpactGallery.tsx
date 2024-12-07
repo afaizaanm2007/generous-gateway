@@ -6,6 +6,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 export const ImpactGallery = () => {
   // This would come from your API in a real app
@@ -30,10 +33,19 @@ export const ImpactGallery = () => {
     }
   ];
 
+  const [api] = useEmblaCarousel(
+    { loop: true },
+    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+  );
+
   return (
     <div className="py-6">
       <h3 className="text-xl font-semibold mb-4">Your Impact Updates</h3>
-      <Carousel className="w-full">
+      <Carousel 
+        opts={{ loop: true }}
+        plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+        className="w-full"
+      >
         <CarouselContent>
           {impactUpdates.map((update) => (
             <CarouselItem key={update.id} className="md:basis-1/2">
