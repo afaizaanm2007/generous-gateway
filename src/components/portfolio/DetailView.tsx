@@ -34,15 +34,15 @@ export const DetailView = ({ option, onClose }: DetailViewProps) => {
             {option.name}
           </h2>
           <p className="text-gray-600 mb-6">{option.description}</p>
-          <div className="h-[400px]">
-            <ResponsiveContainer>
-              <PieChart>
+          <div className="w-full aspect-square">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                 <Pie
                   data={option.data}
                   cx="50%"
                   cy="50%"
                   innerRadius={80}
-                  outerRadius={160}
+                  outerRadius="90%"
                   paddingAngle={2}
                   dataKey="value"
                 >
@@ -54,7 +54,11 @@ export const DetailView = ({ option, onClose }: DetailViewProps) => {
                     />
                   ))}
                 </Pie>
-                <Legend />
+                <Legend 
+                  layout="horizontal"
+                  align="center"
+                  verticalAlign="bottom"
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
