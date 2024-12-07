@@ -9,6 +9,7 @@ import InterestsOnboarding from "./pages/InterestsOnboarding";
 import FollowNonprofitsOnboarding from "./pages/FollowNonprofitsOnboarding";
 import PortfolioAllocation from "./pages/PortfolioAllocation";
 import Dashboard from "./pages/Dashboard";
+import ExploreCauses from "./pages/ExploreCauses";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/follow-nonprofits" element={<FollowNonprofitsOnboarding />} />
           <Route path="/portfolio-allocation" element={<PortfolioAllocation />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/explore-causes" element={<ExploreCauses />} />
         </Routes>
       </BrowserRouter>
       <Toaster />
