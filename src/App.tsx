@@ -8,6 +8,7 @@ import Onboarding from "./pages/Onboarding";
 import InterestsOnboarding from "./pages/InterestsOnboarding";
 import FollowNonprofitsOnboarding from "./pages/FollowNonprofitsOnboarding";
 import PortfolioAllocation from "./pages/PortfolioAllocation";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/interests-onboarding" element={<InterestsOnboarding />} />
           <Route path="/follow-nonprofits" element={<FollowNonprofitsOnboarding />} />
           <Route path="/portfolio-allocation" element={<PortfolioAllocation />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
       <Toaster />
